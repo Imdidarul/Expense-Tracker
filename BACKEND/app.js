@@ -3,12 +3,14 @@ const app = express()
 const cors = require("cors")
 const db = require("./utils/dbConnection")
 const expenseRoute = require("./routes/expenseRoute")
+const signupRoute = require("./routes/signupRoute")
 
 
 app.use(cors())
 
 app.use(express.json())
 
+app.use("/user",signupRoute)
 app.use("/expenses",expenseRoute)
 
 

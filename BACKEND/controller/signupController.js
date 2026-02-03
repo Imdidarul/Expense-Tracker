@@ -1,4 +1,4 @@
-const {User} = require("../model/user")
+const User = require("../model/user")
 
 const addUser = async (req,res)=>{
     try {
@@ -11,8 +11,11 @@ const addUser = async (req,res)=>{
         })
 
         console.log("User is created")
-        res.satus(201).send(`User ${name} is created!`)
+        res.status(201).send(`User ${name} is created!`)
     } catch (error) {
+        if (error.name === "SequelizeUniqueConstraintError") {
+            return res.status(409).send("Email already exists");
+        }
         res.status(500).send("Unable to add user!")
     }
 }
