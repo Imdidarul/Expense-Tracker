@@ -8,12 +8,12 @@ const validate = async (req,res)=>{
 
     const user = await User.findOne({where:{email:email}})
     if(!user){
-        return res.status(404).send("User not found")
+        return res.status(404).json({message:"Error:404 User not found"})
         
     }
 
     if(user.password != password){
-        return res.status(401).send("Password is incorrect")
+        return res.status(401).json({message:"Error: 401 Password is incorrect"})
     }
 
     console.log("user logged in successfully")

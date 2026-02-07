@@ -13,6 +13,10 @@ function handleFormSubmit(event){
     axios.post(`${api_url}/validate`,loginDetails).then((result)=>{
         alert("Logged in successfully")
     }).catch((error)=>{
-        console.log(error)
+        if(error.response){
+            alert(error.response.data.message)
+        }else{
+            alert("Server side error")
+        }
     })
 }
