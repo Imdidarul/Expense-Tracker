@@ -1,13 +1,17 @@
 const User = require("../model/user")
+const bcrypt = require("bcrypt")
 
 const addUser = async (req,res)=>{
     try {
         const {name, email, password} = req.body
+        const saltrounds = 10
 
-        const user = await User.create({
-            name: name,
-            email:email,
-            password:password
+        bcrypt.hash(password, saltrounds, async function(err,hash){
+            await User.create({
+                name: name,
+                email:email,
+                password:hash
+            })
         })
 
         console.log("User is created")
