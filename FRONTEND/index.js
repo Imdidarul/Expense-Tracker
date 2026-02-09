@@ -4,7 +4,8 @@ let editingLi = null
 const api_url = "http://localhost:3000/expenses"
 
 function loadExpense(){
-    axios.get(`${api_url}/getExpense`)
+    const token = localStorage.getItem("token")
+    axios.get(`${api_url}/getExpense`,{headers:{Authorization: `${token}`}})
     .then((response)=>{
         allExpenses = response.data || []
         const ul = document.querySelector("ul")
@@ -20,6 +21,7 @@ function loadExpense(){
 
 function handleFormSubmit(event){
     event.preventDefault()
+    const token = localStorage.getItem('token')
 
     const expenseDetails = {
         amount: Number(document.getElementById("amount").value),
@@ -32,7 +34,7 @@ function handleFormSubmit(event){
 
     if(editExpenseId){
         axios.put(`${api_url}/updateExpense/${editExpenseId}`,
-        expenseDetails).then(()=>{
+        expenseDetails, {headers: {Authorization: token}}).then(()=>{
             expenseDetails.id = editExpenseId
             for (let i = 0; i<allExpenses.length;i++){
                 if(allExpenses[i].id == editExpenseId){
@@ -51,7 +53,7 @@ function handleFormSubmit(event){
         })
     }else{
         axios.post(`${api_url}/addExpense`,
-        expenseDetails).then((response)=>{
+        expenseDetails,{headers:{Authorization: `${token}`}}).then((response)=>{
             allExpenses.push(response.data)
             displayExpenseOnScreen(response.data)
         }).catch((err)=>{console.log(err)})
@@ -64,6 +66,7 @@ function handleFormSubmit(event){
 
 function displayExpenseOnScreen(expenseDetails){
     const expenseItem = document.createElement("li")
+    const token = localStorage.getItem('token')
 
     expenseItem.dataset.id = expenseDetails.id
 
@@ -88,7 +91,7 @@ function displayExpenseOnScreen(expenseDetails){
 
     deleteBtn.addEventListener("click", function(){
         const id = Number(expenseItem.dataset.id)
-        axios.delete(`${api_url}/deleteExpense/${id}`)
+        axios.delete(`${api_url}/deleteExpense/${id}`, {headers:{Authorization: token}})
         .then(()=>{
             allExpenses = allExpenses.filter((b)=>b.id != id)
             expenseList.removeChild(expenseItem)

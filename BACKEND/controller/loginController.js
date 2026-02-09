@@ -1,6 +1,10 @@
-const User = require("../model/user")
+const {User} = require("../model")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
+function generateToken(id){
+    return jwt.sign({userId: id}, "thisisasecretkey")
+}
 
 const validate = async (req,res)=>{
     try {
@@ -18,7 +22,7 @@ const validate = async (req,res)=>{
         }
         if(result){
             console.log("User logged in")
-            res.status(200).send("User logged in succesfully")
+            res.status(200).json({message:"User logged in succesfully", token: generateToken(user.id)})
         }else{
             return res.status(401).json({message:"Password is incorrect"})
         }

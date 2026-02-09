@@ -1,4 +1,4 @@
-const Expense = require("../model/expense")
+const {Expense} = require("../model")
 
 const addExpense = async (req,res)=>{
     try {
@@ -7,11 +7,13 @@ const addExpense = async (req,res)=>{
         const expense = await Expense.create({
             amount: amount,
             description: description,
-            category: category
+            category: category,
+            userId: req.user.id
         });
         console.log("Expense added")
         res.status(201).json(expense)
     } catch (error) {
+            console.log(error)
             res.status(500).send("Unable to add expense")
     }
 }
@@ -25,7 +27,7 @@ const addExpense = async (req,res)=>{
 
 const getExpenses = async (req,res) => {
     try {
-        const expense = await Expense.findAll()
+        const expense = await Expense.findAll({where:{userId: req.user.id}})
         console.log("All expenses fetched")
         res.status(200).json(expense)
     } catch (error) {
@@ -42,7 +44,7 @@ const updateExpense = async (req,res)=>{
         const {amount,description,category}= req.body
         const [updatedRows] = await Expense.update(
             {amount,description,category},
-            {where: {id}}
+            {where: {id, userId: req.user.id}}
         )
 
         if (updatedRows === 0){
@@ -65,7 +67,8 @@ const deleteExpense = async (req,res)=>{
         const {id} = req.params
         const expense = await Expense.destroy({
             where:{
-                id:id
+                id:id,
+                userId: req.user.id
             }
         })
 

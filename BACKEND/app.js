@@ -18,7 +18,7 @@ app.use("/expenses",expenseRoute)
 
 
 
-db.sync({force:true}).then(()=>{
+db.sync().then(()=>{
     app.listen(3000,(err)=>{
         console.log("Server is running")
     })

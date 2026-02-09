@@ -12,6 +12,8 @@ function handleFormSubmit(event){
 
     axios.post(`${api_url}/validate`,loginDetails).then((result)=>{
         // alert("Logged in successfully")
+        localStorage.setItem('token', result.data.token)
+        console.log(result.data.token)
         window.location.href = "./index.html"
 
     }).catch((error)=>{
