@@ -68,11 +68,12 @@ function displayExpenseOnScreen(expenseDetails){
     expenseItem.dataset.id = expenseDetails.id
 
     expenseItem.appendChild(
-        document.createTextNode(`${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category}`)
+        document.createTextNode(`${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category}  `)
     )
 
     const deleteBtn = document.createElement("button")
     deleteBtn.innerText = "Delete"
+    deleteBtn.classList.add("deleteBtn")
     expenseItem.appendChild(deleteBtn)
 
     const expenseList = document.querySelector("ul")
@@ -81,6 +82,7 @@ function displayExpenseOnScreen(expenseDetails){
 
     const editBtn = document.createElement("button")
     editBtn.innerText = "Edit"
+    editBtn.classList.add('editBtn')
     expenseItem.appendChild(editBtn)
 
 

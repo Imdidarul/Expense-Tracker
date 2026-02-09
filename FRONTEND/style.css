@@ -2,6 +2,71 @@
     width: 180px;
 }
 
+.formElements{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.expense-amount{
+    /* display: flex; */
+    /* flex-direction: column; */
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px;
+}
+#amount{
+    width: 200px;
+    height: 30px;
+}
+
+.description{
+    font-weight: bold;
+    margin: 10PX;
+    font-size: 18px;
+}
+
+#description{
+    width: 200px;
+    height: 30px;
+}
+
+.category{
+    font-weight: bold;
+    margin: 10px;
+    font-size: 18px;
+}
+
+#category{
+    width: 200px;
+    height: 30px;
+}
+
+
+.deleteBtn{
+    background-color: red;
+    color: black;
+    margin: 10px;
+    width: 70px;
+    /* padding: 10px; */
+}
+
+.editBtn{
+    background-color: blue;
+    color: white;
+    width: 70px;
+    /* padding: 10px; */
+}
+
+
+.addBtn{
+    background-color: green;
+    color: white;
+    margin: 20px;
+    width: 150px;
+    height: 40px;
+}
+
 @media (max-width: 768px){
     .d-flex{
         width: 100%;

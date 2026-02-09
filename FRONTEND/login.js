@@ -11,7 +11,9 @@ function handleFormSubmit(event){
 
 
     axios.post(`${api_url}/validate`,loginDetails).then((result)=>{
-        alert("Logged in successfully")
+        // alert("Logged in successfully")
+        window.location.href = "./index.html"
+
     }).catch((error)=>{
         if(error.response){
             alert(error.response.data.message)
