@@ -11,6 +11,9 @@ const authenticate = (req, res, next)=>{
         const userid = extracted.userId
 
         User.findByPk(userid).then(user=>{
+            if(!user){
+                return res.status(401).json({success: false, message: "User not found"})
+            }
             req.user = user
             next()
         }).catch(err=>{
@@ -18,7 +21,7 @@ const authenticate = (req, res, next)=>{
         })
 
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
         return res.status(401).json({success: false})
     }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- <a href="payment.html"><button style="margin: 10px;"></button></a> -->
+    <form id="payment-form" onsubmit="handleFormSubmit(event)">
+        <div class="formElements">
+            <div class="customerPhone">
+                <label for="phone">Phone number:-</label>
+                <input type="text" id="phone" required>
+            </div>
+            <div class="plan">
+                <label for="plan">Choose plan:</label>
+                <select id="plan" required>
+                    <option>INR 399</option>
+                    <option>INR 599</option>
+                    <option>INR 999</option>
+                    <option>INR 1499</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="addBtn">Buy</button>
+    </form>
+
+    <a href="index.html"><button style="margin: 10px;">Go back</button></a>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script src="payment.js"></script>
+</body>
+</html>

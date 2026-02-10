@@ -3,9 +3,24 @@ let allExpenses = []
 let editingLi = null
 const api_url = "http://localhost:3000/expenses"
 
+
+function isPremium(){
+    const premium = JSON.parse(localStorage.getItem('premium'))
+    const premiumBtn = document.getElementById("premiumBtn")
+    if(premium){
+        premiumBtn.innerText = "Premium"
+        premiumBtn.disabled = true
+    }else{
+        premiumBtn.innerText = "Buy premium"
+        premiumBtn.onclick = () => {
+            window.location.href = "payment.html"
+        }
+    }
+}
+
 function loadExpense(){
     const token = localStorage.getItem("token")
-    axios.get(`${api_url}/getExpense`,{headers:{Authorization: `${token}`}})
+    axios.get(`${api_url}/getExpense`,{headers:{authorization: `${token}`}})
     .then((response)=>{
         allExpenses = response.data || []
         const ul = document.querySelector("ul")
@@ -34,7 +49,7 @@ function handleFormSubmit(event){
 
     if(editExpenseId){
         axios.put(`${api_url}/updateExpense/${editExpenseId}`,
-        expenseDetails, {headers: {Authorization: token}}).then(()=>{
+        expenseDetails, {headers: {authorization: token}}).then(()=>{
             expenseDetails.id = editExpenseId
             for (let i = 0; i<allExpenses.length;i++){
                 if(allExpenses[i].id == editExpenseId){
@@ -53,7 +68,7 @@ function handleFormSubmit(event){
         })
     }else{
         axios.post(`${api_url}/addExpense`,
-        expenseDetails,{headers:{Authorization: `${token}`}}).then((response)=>{
+        expenseDetails,{headers:{authorization: `${token}`}}).then((response)=>{
             allExpenses.push(response.data)
             displayExpenseOnScreen(response.data)
         }).catch((err)=>{console.log(err)})
@@ -91,7 +106,7 @@ function displayExpenseOnScreen(expenseDetails){
 
     deleteBtn.addEventListener("click", function(){
         const id = Number(expenseItem.dataset.id)
-        axios.delete(`${api_url}/deleteExpense/${id}`, {headers:{Authorization: token}})
+        axios.delete(`${api_url}/deleteExpense/${id}`, {headers:{authorization: token}})
         .then(()=>{
             allExpenses = allExpenses.filter((b)=>b.id != id)
             expenseList.removeChild(expenseItem)
@@ -121,4 +136,9 @@ function displayExpenseOnScreen(expenseDetails){
 
 
 
-window.addEventListener("DOMContentLoaded",loadExpense)
+
+
+
+
+
+window.addEventListener("DOMContentLoaded",()=>{isPremium(),loadExpense()})

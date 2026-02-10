@@ -5,6 +5,7 @@ const db = require("./utils/dbConnection")
 const expenseRoute = require("./routes/expenseRoute")
 const signupRoute = require("./routes/signupRoute")
 const loginRoute = require("./routes/loginRoute")
+const paymentRoute = require("./routes/paymentRoute")
 
 
 app.use(cors())
@@ -14,11 +15,11 @@ app.use(express.json())
 app.use("/user",signupRoute)
 app.use("/login",loginRoute)
 app.use("/expenses",expenseRoute)
+app.use("/api/payment", paymentRoute);
 
 
 
-
-db.sync().then(()=>{
+db.sync({alter:true}).then(()=>{
     app.listen(3000,(err)=>{
         console.log("Server is running")
     })

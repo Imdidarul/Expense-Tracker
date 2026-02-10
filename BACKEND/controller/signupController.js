@@ -10,7 +10,8 @@ const addUser = async (req,res)=>{
             await User.create({
                 name: name,
                 email:email,
-                password:hash
+                password:hash,
+                premium: false
             })
         })
 
