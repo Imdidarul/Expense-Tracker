@@ -1,6 +1,6 @@
 const { Cashfree, CFEnvironment } = require("cashfree-pg")
 
-const cashfree = new Cashfree(CFEnvironment.SANDBOX, "Ap-key", "api-key");
+const cashfree = new Cashfree(CFEnvironment.SANDBOX, api-key, api-key);
 
 
 const createOrder = async(
