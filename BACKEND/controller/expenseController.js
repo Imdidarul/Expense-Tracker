@@ -12,7 +12,7 @@ const addExpense = async (req,res)=>{
             userId: req.user.id
         });
 
-        const user = User.findOne({where:{id:req.user.id}})
+        const user = await User.findOne({where:{id:req.user.id}})
 
         user.totalExpense = user.totalExpense + amount
 
@@ -50,21 +50,31 @@ const updateExpense = async (req,res)=>{
     try {
         const {id} = req.params
         const {amount,description,category}= req.body
-        const [updatedRows] = await Expense.update(
-            {amount,description,category},
-            {where: {id, userId: req.user.id}}
-        )
 
-        if (updatedRows === 0){
-            res.status(404).send("Expense not found")
-            return
-        }
         const expense = await Expense.findOne({
             where:{id, userId: req.user.id}
         })
-        const difference = amount - expense.amount
 
-        const user = User.findOne({where:{id:req.user.id}})
+        if (!expense){
+            return res.status(404).send("Expense not found")
+        }
+        const oldAmount = expense.amount
+
+        const difference = amount - oldAmount
+
+
+        // const [updatedRows] = 
+        await expense.update(
+            {amount,description,category}
+        )
+
+        // if (updatedRows === 0){
+        //     res.status(404).send("Expense not found")
+        //     return
+        // }
+        
+
+        const user = await User.findOne({where:{id:req.user.id}})
 
         user.totalExpense = user.totalExpense + difference
 
@@ -83,7 +93,7 @@ const updateExpense = async (req,res)=>{
 const deleteExpense = async (req,res)=>{
     try {
         const {id} = req.params
-        const expense = await Expense.destroy({
+        const expense = await Expense.findOne({
             where:{
                 id:id,
                 userId: req.user.id
@@ -95,9 +105,14 @@ const deleteExpense = async (req,res)=>{
             return
         }
 
-        const user = User.findOne({where:{id:req.user.id}})
+        const amount = expense.amount
+
+        await expense.destroy()
+
+        const user = await User.findOne({where:{id:req.user.id}})
 
         user.totalExpense = user.totalExpense - amount
+        
 
         await user.save()
         console.log("Expense deleted")
