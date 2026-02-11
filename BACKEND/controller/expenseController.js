@@ -1,4 +1,5 @@
-const {Expense} = require("../model")
+const {Expense, User} = require("../model")
+// const {Expense, User} = require("../")
 
 const addExpense = async (req,res)=>{
     try {
@@ -10,6 +11,13 @@ const addExpense = async (req,res)=>{
             category: category,
             userId: req.user.id
         });
+
+        const user = User.findOne({where:{id:req.user.id}})
+
+        user.totalExpense = user.totalExpense + amount
+
+        await user.save()
+
         console.log("Expense added")
         res.status(201).json(expense)
     } catch (error) {
@@ -51,6 +59,16 @@ const updateExpense = async (req,res)=>{
             res.status(404).send("Expense not found")
             return
         }
+        const expense = await Expense.findOne({
+            where:{id, userId: req.user.id}
+        })
+        const difference = amount - expense.amount
+
+        const user = User.findOne({where:{id:req.user.id}})
+
+        user.totalExpense = user.totalExpense + difference
+
+        await user.save()
 
 
         console.log("Expense updated")
@@ -76,6 +94,12 @@ const deleteExpense = async (req,res)=>{
             res.status(404).send("Expense not found")
             return
         }
+
+        const user = User.findOne({where:{id:req.user.id}})
+
+        user.totalExpense = user.totalExpense - amount
+
+        await user.save()
         console.log("Expense deleted")
         res.status(200).send("Expense is deleted")
     } catch (error) {

@@ -1,6 +1,6 @@
 const { Cashfree, CFEnvironment } = require("cashfree-pg")
 
-const cashfree = new Cashfree(CFEnvironment.SANDBOX, key, secret);
+const cashfree = new Cashfree(CFEnvironment.SANDBOX, "TEST430329ae80e0f32e41a393d78b923034", "TESTaf195616268bd6202eeb3bf8dc458956e7192a85");
 
 
 const createOrder = async(
@@ -25,7 +25,8 @@ const createOrder = async(
                 customer_email: "test@gmail.com"
             },
             order_meta: {
-                "return_url": "http://127.0.0.1:5500/FRONTEND/index.html?order_id={order_id}"
+                "return_url": "http://127.0.0.1:5500/FRONTEND/index.html?order_id={order_id}",
+                "notify_url": "https://www.cashfree.com/devstudio/preview/pg/webhooks/50403648"
             },
             order_expiry_time: formatedExpiry
         };

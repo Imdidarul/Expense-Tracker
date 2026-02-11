@@ -6,6 +6,7 @@ const expenseRoute = require("./routes/expenseRoute")
 const signupRoute = require("./routes/signupRoute")
 const loginRoute = require("./routes/loginRoute")
 const paymentRoute = require("./routes/paymentRoute")
+const leaderboardRoute = require("./routes/leaderboardRoute")
 
 
 app.use(cors())
@@ -16,6 +17,7 @@ app.use("/user",signupRoute)
 app.use("/login",loginRoute)
 app.use("/expenses",expenseRoute)
 app.use("/api/payment", paymentRoute);
+app.use("/api", leaderboardRoute)
 
 
 
