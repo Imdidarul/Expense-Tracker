@@ -26,10 +26,10 @@ const users = sequelize.define(
             type: DataTypes.BOOLEAN,
             allowNull: false
         },
-        totalExpense: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0
-        }
+        // totalExpense: {
+        //     type: DataTypes.INTEGER,
+        //     defaultValue: 0
+        // }
         }
 )
 

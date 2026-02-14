@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cashfree Checkout Integration</title>
+        <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    </head>
+    <body>
+        <div class="row">
+            <p>Click below to open the checkout page in current tab</p>
+            <button id="renderBtn">Proceed to Pay</button>
+        </div>
+        <!-- <script>
+            const sessionId = localStorage.getItem("paymentSessionId")
+            const cashfree = Cashfree({
+                mode: "sandbox",
+            });
+            document.getElementById("renderBtn").addEventListener("click", () => {
+                let checkoutOptions = {
+                    paymentSessionId: sessionId,
+                    redirectTarget: "_self",
+                };
+                cashfree.checkout(checkoutOptions);
+            });
+        </script> -->
+        <script>
+            const sessionId = localStorage.getItem("paymentSessionId")
+            const cashfree = Cashfree({ mode: "sandbox" });
+            
+            document.getElementById("renderBtn").addEventListener("click", async () => {
+                cashfree.checkout({
+                    paymentSessionId: sessionId,
+                    redirectTarget: "_self",
+                });
+            });
+            </script>
+            
+    </body>
+</html>

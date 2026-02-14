@@ -1,14 +1,51 @@
+// const { head } = require("../BACKEND/routes/leaderboardRoute");
+
 let editExpenseId = null
 let allExpenses = []
 let editingLi = null
 const api_url = "http://localhost:3000/expenses"
 
+const urlParams = new URLSearchParams(window.location.search);
+const orderId = urlParams.get("order_id");
+
+
+
+
 
 function isPremium(){
     const premium = JSON.parse(localStorage.getItem('premium'))
     const premiumBtn = document.getElementById("premiumBtn")
+    const token = localStorage.getItem("token")
+    const leaderboardBtn = document.getElementById("leaderboard")
+
+    if (orderId) {
+        axios.post("http://localhost:3000/api/payment/verify-payment", {
+            orderId,
+            // paymentStatus: "SUCCESS"
+        }, {
+            headers: { authorization: token }
+        }).then((res) => {
+            if (res.data.status === "SUCCESS"){
+                localStorage.setItem("premium", true);
+                premiumBtn.innerText = "Premium"
+                premiumBtn.disabled = true
+                leaderboardBtn.style.display = "block"
+                alert("Transaction successful")
+            } else if (res.data.status === "PENDING"){
+                alert("Payment is pending")
+            }else{
+                alert("Transaction Failed")
+            }
+            window.location.href = "index.html"
+        }).catch((error)=>{
+            console.log(error.message)
+            alert("Transaction Failed")
+        })
+    }
+
     if(premium){
         premiumBtn.innerText = "Premium"
+        leaderboardBtn.style.display = "block"
         premiumBtn.disabled = true
     }else{
         premiumBtn.innerText = "Buy premium"
@@ -23,7 +60,7 @@ function loadExpense(){
     axios.get(`${api_url}/getExpense`,{headers:{authorization: `${token}`}})
     .then((response)=>{
         allExpenses = response.data || []
-        const ul = document.querySelector("ul")
+        const ul = document.getElementById("expense-list")
         ul.innerHTML = ""
         
         response.data.forEach((expense) => {
@@ -50,6 +87,7 @@ function handleFormSubmit(event){
     if(editExpenseId){
         axios.put(`${api_url}/updateExpense/${editExpenseId}`,
         expenseDetails, {headers: {authorization: token}}).then(()=>{
+            refreshLeaderboard()
             expenseDetails.id = editExpenseId
             for (let i = 0; i<allExpenses.length;i++){
                 if(allExpenses[i].id == editExpenseId){
@@ -70,6 +108,7 @@ function handleFormSubmit(event){
         axios.post(`${api_url}/addExpense`,
         expenseDetails,{headers:{authorization: `${token}`}}).then((response)=>{
             allExpenses.push(response.data)
+            refreshLeaderboard()
             displayExpenseOnScreen(response.data)
         }).catch((err)=>{console.log(err)})
     }
@@ -94,7 +133,7 @@ function displayExpenseOnScreen(expenseDetails){
     deleteBtn.classList.add("deleteBtn")
     expenseItem.appendChild(deleteBtn)
 
-    const expenseList = document.querySelector("ul")
+    const expenseList = document.getElementById("expense-list")
     expenseList.appendChild(expenseItem)
 
 
@@ -108,6 +147,7 @@ function displayExpenseOnScreen(expenseDetails){
         const id = Number(expenseItem.dataset.id)
         axios.delete(`${api_url}/deleteExpense/${id}`, {headers:{authorization: token}})
         .then(()=>{
+            refreshLeaderboard()
             allExpenses = allExpenses.filter((b)=>b.id != id)
             expenseList.removeChild(expenseItem)
         })
@@ -136,6 +176,50 @@ function displayExpenseOnScreen(expenseDetails){
 
 
 
+
+function showLeaderboard(){
+    const token = localStorage.getItem("token")
+
+    axios.get("http://localhost:3000/api/leaderboard", {
+        headers:{authorization: token}
+    }).then((res)=>{
+        const leaderboardData = res.data
+
+        const ul = document.getElementById("leaderboard-list")
+        ul.innerHTML = ""
+        ul.style.display = "block"
+
+        const heading = document.createElement("h3")
+        heading.textContent = "Leaderboard"
+        ul.appendChild(heading)
+
+
+        leaderboardData.forEach((user, index)=>{
+            const li = document.createElement("li")
+            li.textContent = `${index + 1}. ${user.name} - INR ${user.totalExpense}`
+            ul.appendChild(li)
+        })
+
+        const hideButton = document.createElement("button")
+        hideButton.innerText = "Hide leaderboard"
+        hideButton.onclick= function(){
+            ul.style.display = "none"
+        }
+        ul.appendChild(hideButton)
+    }).catch((error)=>{
+        console.log(error.message)
+    })
+
+}
+
+
+function refreshLeaderboard(){
+    const ul = document.getElementById("leaderboard-list")
+
+    if(ul.style.display === "block"){
+        showLeaderboard()
+    }
+}
 
 
 

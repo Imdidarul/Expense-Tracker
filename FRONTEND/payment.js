@@ -1,7 +1,3 @@
-
-
-
-
 function handleFormSubmit(event){
     event.preventDefault()
     const token = localStorage.getItem("token")
@@ -21,6 +17,8 @@ function handleFormSubmit(event){
     }, {headers:{authorization: token}})
     .then(res => {
         const { paymentSessionId, orderId } = res.data;
+        localStorage.setItem("paymentSessionId",paymentSessionId)
+        window.location.href = "paymentGateway.html"
 
         // Cashfree.checkout({
         //     paymentSessionId: paymentSessionId,
