@@ -1,4 +1,4 @@
-// const { head } = require("../BACKEND/routes/leaderboardRoute");
+
 
 let editExpenseId = null
 let allExpenses = []
@@ -71,15 +71,19 @@ function loadExpense(){
     })
 }
 
-function handleFormSubmit(event){
+async function handleFormSubmit(event){
     event.preventDefault()
     const token = localStorage.getItem('token')
+
+    const category = await findCategory()
+    
+
 
     const expenseDetails = {
         amount: Number(document.getElementById("amount").value),
         description: document.getElementById("description").value,
-        category: document.getElementById("category").value
-
+        // category: document.getElementById("category").value
+        category: category
     }
 
 
@@ -115,6 +119,20 @@ function handleFormSubmit(event){
 
 
     event.target.reset()
+}
+
+
+async function findCategory(){
+    const description = document.getElementById("description").value
+    try {
+        const response = await axios.post(`${api_url}/ask`,{description})
+
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return "Other"
+    }
+
 }
 
 

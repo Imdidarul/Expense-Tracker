@@ -7,6 +7,7 @@ const signupRoute = require("./routes/signupRoute")
 const loginRoute = require("./routes/loginRoute")
 const paymentRoute = require("./routes/paymentRoute")
 const leaderboardRoute = require("./routes/leaderboardRoute")
+require('dotenv').config()
 
 
 app.use(cors())
