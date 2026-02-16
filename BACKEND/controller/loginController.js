@@ -1,6 +1,7 @@
 const {User} = require("../model")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const {BrevoClient} = require('@getbrevo/brevo')
 
 function generateToken(id){
     return jwt.sign({userId: id}, "thisisasecretkey")
@@ -37,4 +38,38 @@ const validate = async (req,res)=>{
 }
 
 
-module.exports = {validate}
+const forgotPassword = async(req, res)=>{
+    try {
+
+        const brevo = new BrevoClient({
+        apiKey: process.env.BREVO_API_KEY,
+        });
+        const {email} = req.body
+
+        const user = await User.findOne({where:{email:email}})
+        if(!user){
+            return res.status(404).json({message:"Error:404 User not found"})   
+        }
+
+        console.log("BREVO KEY:", process.env.BREVO_API_KEY)
+
+
+        const result = await brevo.transactionalEmails.sendTransacEmail({
+        subject: "Test",
+        textContent: "Test succeded!",
+        sender: { name: "Didar", email: "didarullaskar1@gmail.com" },
+        to: [{ email: email }]
+        });
+
+        console.log('Email sent:', result);
+        res.status(200).json("Email Sent")
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error.message)
+    }
+}
+
+
+
+module.exports = {validate,forgotPassword}

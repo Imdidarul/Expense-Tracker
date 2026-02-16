@@ -7,6 +7,7 @@ const signupRoute = require("./routes/signupRoute")
 const loginRoute = require("./routes/loginRoute")
 const paymentRoute = require("./routes/paymentRoute")
 const leaderboardRoute = require("./routes/leaderboardRoute")
+const passwordRoute = require("./routes/passwordRoute")
 require('dotenv').config()
 
 
@@ -19,6 +20,8 @@ app.use("/login",loginRoute)
 app.use("/expenses",expenseRoute)
 app.use("/api/payment", paymentRoute);
 app.use("/api", leaderboardRoute)
+app.use("/password/",passwordRoute)
+
 
 
 

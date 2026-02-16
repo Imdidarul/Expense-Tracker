@@ -4,6 +4,7 @@ const loginController = require("../controller/loginController")
 
 
 router.post("/validate",loginController.validate)
+router.post("/forgotPassword",loginController.forgotPassword)
 
 
 module.exports = router
