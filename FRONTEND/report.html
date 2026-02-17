@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+    <div class="top">
+    <h1 class="heading">Day to Day Expenses</h1>
+    </div>
+    <p style="margin-left: 80px;">17 February 2026, 9:36PM</p>
+    <div class="year-month">
+        <h2>2026</h2>
+        <h3>February 2026</h3>
+    </div>
+
+    <div class="allTable" id="reportContent">
+        <div class="table">
+            <table>
+                <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Income</th>
+                <th>Expense</th>
+                </tr>
+                <tr>
+                <td>01-02-2026</td>
+                <td>Milk</td>
+                <td>Drink</td>
+                <td></td>
+                <td>60.00</td>
+                </tr>
+                <tr class="dayEnd">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>0.00</td>
+                <td>60.00</td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Salary</td>
+                    <td>Salary</td>
+                    <td>40,0000</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Fruits</td>
+                    <td>Fruits</td>
+                    <td></td>
+                    <td>500.00</td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Medicines</td>
+                    <td>Health</td>
+                    <td></td>
+                    <td>50.00</td>
+                </tr>
+                <tr class="dayEnd">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>40,000.00</td>
+                    <td>550.00</td>
+                </tr>
+
+                <tr class="dayEnd">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="income">₹ 40,000.00</td>
+                    <td class="expense">₹ 550.00</td>
+                </tr>
+
+                <tr class="dayEnd">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="savings">Savings = ₹ 39,290.00</td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div class="year-month">
+            <h3>Yearly Report</h3>
+        </div>
+
+
+
+        <div class="YearlyReport" style="margin-top: 20px;">
+            <table>
+                <tr>
+                <th>Month</th>
+                <th>Income</th>
+                <th>Expense</th>
+                <th>Savings</th>
+                </tr>
+                <tr>
+                <td>February</td>
+                <td>40,000.00</td>
+                <td>610.00</td>
+                <td>39,390.00</td>
+                </tr>
+                <tr class="dayEnd">
+                    <td></td>
+                    <td class="income">₹ 40,000.00</td>
+                    <td class="expense">₹ 610.00</td>
+                    <td class="savings">₹ 39,390.00</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="year-month">
+            <h3>Notes Report 2026</h3>
+        </div>
+
+        <div class="NotesReport" style="margin-top: 20px;">
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>01-02-2026</td>
+                    <td>Bought Milk</td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Received Salary</td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Bought fruits for home</td>
+                </tr>
+                <tr>
+                    <td>02-02-2026</td>
+                    <td>Bought Medicines</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+    <button class="downloadBtn" id="downloadBtn" type="button" onclick="downloadReport()">Download</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="report.js"></script>
+</body>
+</html>

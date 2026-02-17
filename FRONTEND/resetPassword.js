@@ -6,9 +6,9 @@ async function handleFormSubmit(event){
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token")
 
-    const newpassword = document.getElementById("password").value
+    const newPassword = document.getElementById("password").value
 
-    axios.post(`http://localhost:3000/password/updatepassword`,{token, newpassword}).then(()=>{
+    axios.post(`http://localhost:3000/password/updatepassword`,{token, newPassword}).then(()=>{
             alert("Password updated")
         }
     ).catch(()=>{

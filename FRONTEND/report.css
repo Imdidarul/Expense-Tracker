@@ -1,0 +1,138 @@
+*{
+    background-color: beige;
+    align-items: center ;
+}
+
+.allTable{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.year-month{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.table{
+    width: 90%;
+    /* background-color: #f6f6f6; */
+}
+
+.table table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.table th,.table td{
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #f6f6f6;
+    text-align: center;
+}
+
+.table th{
+    color: white;
+    background-color: #1a6d9c;
+}
+
+.dayEnd td{
+    background-color: #d8f2ee;
+}
+
+.heading{
+    color: #259cac;
+}
+
+
+.YearlyReport{
+    width: 90%;
+}
+.YearlyReport table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.YearlyReport th,.YearlyReport td{
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #f6f6f6;
+    text-align: center;
+}
+
+.YearlyReport th{
+    color: white;
+    background-color: #1a6d9c;
+}
+
+.dayEnd td{
+    background-color: #d8f2ee;
+}
+
+
+
+
+
+
+.NotesReport{
+    width: 90%;
+    margin: 20px auto;
+}
+.NotesReport table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.NotesReport th,.NotesReport td{
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #f6f6f6;
+    text-align: center;
+}
+
+.NotesReport th{
+    color: white;
+    background-color: #1a6d9c;
+}
+
+
+
+.dayEnd .income{
+    font-weight: bold;
+    color: green;
+}
+
+.dayEnd .expense{
+    font-weight: bold;
+    color: red;
+}
+
+.dayEnd .savings{
+    font-weight: bold;
+    color: blue;
+}
+
+.downloadBtn{
+    display: none;
+    padding: 10px 20px;
+    background-color: #259cac;     
+    color: #f4bebe;
+    margin: 30px auto;
+    font-weight: bolder;
+    font-size: large;
+    width: 200px;
+    height: 50px;
+}

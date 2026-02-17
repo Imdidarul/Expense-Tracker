@@ -187,7 +187,7 @@ function displayExpenseOnScreen(expenseDetails){
         if (currentExpense){
             document.getElementById("amount").value = currentExpense.amount
             document.getElementById("description").value = currentExpense.description
-            document.getElementById("category").value = currentExpense.category
+            // document.getElementById("category").value = currentExpense.category
         }
     })
 }
