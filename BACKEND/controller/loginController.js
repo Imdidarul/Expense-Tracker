@@ -68,7 +68,7 @@ const forgotPassword = async(req, res)=>{
 
         console.log("BREVO KEY:", process.env.BREVO_API_KEY)
 
-        const link = `http://127.0.0.1:5500/FRONTEND/resetpassword.html?token=${uuid}`
+        const link = `http://127.0.0.1:5500/FRONTEND/resetPassword.html?token=${uuid}`
 
 
         const result = await brevo.transactionalEmails.sendTransacEmail({
@@ -107,19 +107,19 @@ const updatePassword = async(req,res)=>{
         const userId = resetRequest.userId
         const saltrounds = 10
 
-        bcrypt.hash(password, saltrounds, async function(err,hash){
-            await User.update({password:hash},{where:{Id:userId}})
+        bcrypt.hash(newPassword, saltrounds, async function(err,hash){
+            await User.update({password:hash},{where:{id:userId}})
         })
 
         await ForgotPasswordRequests.update(
             {isactive:false},
             {where:{id:token}}
         )
-        res.status(404).json("Password updated")
+        res.status(200).json("Password updated")
     } catch (error) {
         res.status(500).json(error)
     }
 }
 
 
-module.exports = {validate,forgotPassword}
+module.exports = {validate,forgotPassword, updatePassword}
