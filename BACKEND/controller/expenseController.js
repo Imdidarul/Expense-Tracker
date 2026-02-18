@@ -38,10 +38,25 @@ const addExpense = async (req,res)=>{
 
 const getExpenses = async (req,res) => {
     try {
-        const expense = await Expense.findAll({where:{userId: req.user.id}})
+
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+        const offset = (page-1) * limit
+
+        const {count, rows} = await Expense.findAndCountAll({
+            where:{userId: req.user.id},
+            limit: limit,
+            offset: offset
+        })
         console.log("All expenses fetched")
-        res.status(200).json(expense)
+        res.status(200).json({
+            expenses: rows,
+            totalItems: count,
+            currentPage: page,
+            totalPages: Math.ceil(count/limit)
+        })
     } catch (error) {
+        console.log(error)
         res.status(500).send("Unable to get expenses")
     }
 }
