@@ -1,4 +1,6 @@
-
+let currentPage = 1
+let itemsPerPage = 10
+let totalPages = 1
 
 let editExpenseId = null
 let allExpenses = []
@@ -12,35 +14,51 @@ const orderId = urlParams.get("order_id");
 
 
 
-function isPremium(){
-    const premium = JSON.parse(localStorage.getItem('premium'))
-    const premiumBtn = document.getElementById("premiumBtn")
+async function isPremium(){
+    // const premium = JSON.parse(localStorage.getItem('premium'))
     const token = localStorage.getItem("token")
+    const premiumBtn = document.getElementById("premiumBtn")
     const leaderboardBtn = document.getElementById("leaderboard")
 
     if (orderId) {
-        axios.post("http://localhost:3000/api/payment/verify-payment", {
-            orderId,
-            // paymentStatus: "SUCCESS"
-        }, {
-            headers: { authorization: token }
-        }).then((res) => {
+        try {
+            const res = await axios.post("http://localhost:3000/api/payment/verify-payment", 
+            {orderId}, 
+            {headers: { authorization: token }}
+            )
             if (res.data.status === "SUCCESS"){
-                localStorage.setItem("premium", true);
-                premiumBtn.innerText = "Premium"
-                premiumBtn.disabled = true
-                leaderboardBtn.style.display = "block"
-                alert("Transaction successful")
+                    localStorage.setItem("premium", true);
+                    premiumBtn.innerText = "Premium"
+                    premiumBtn.disabled = true
+                    leaderboardBtn.style.display = "block"
+                    alert("Transaction successful")
             } else if (res.data.status === "PENDING"){
                 alert("Payment is pending")
             }else{
                 alert("Transaction Failed")
             }
-            window.location.href = "index.html"
-        }).catch((error)=>{
-            console.log(error.message)
+                window.location.href = "index.html"   
+                return
+        } catch (error) {
+            console.log(error)
             alert("Transaction Failed")
-        })
+            return
+        }
+    }
+
+
+    let premium = false
+
+    try {
+        const res = await axios.get(
+            "http://localhost:3000/check/premium-status",
+            { headers:{ authorization: token } }
+        )
+
+        premium = res.data.premium
+        
+    } catch (error) {
+        console.log(error)
     }
 
     if(premium){
@@ -55,20 +73,67 @@ function isPremium(){
     }
 }
 
-function loadExpense(){
+
+function pagination(){
+    const rowsDropdown = document.getElementById("rowsPerPage")
+    itemsPerPage = Number(rowsDropdown.value)
+    rowsDropdown.addEventListener("change",()=>{
+        itemsPerPage = Number(rowsDropdown.value)
+        // if (itemsPerPage===0){
+        //     return
+        // }
+        loadExpense(1)
+    })
+}
+
+
+function loadExpense(page = 1){
     const token = localStorage.getItem("token")
-    axios.get(`${api_url}/getExpense`,{headers:{authorization: `${token}`}})
+    axios.get(`${api_url}/getExpense?page=${page}&limit=${itemsPerPage}`,{headers:{authorization: `${token}`}})
     .then((response)=>{
-        allExpenses = response.data || []
+        allExpenses = response.data.expenses || []
+        totalPages = response.data.totalPages
+        currentPage = response.data.currentPage
         const ul = document.getElementById("expense-list")
         ul.innerHTML = ""
         
-        response.data.forEach((expense) => {
+        response.data.expenses.forEach((expense) => {
             displayExpenseOnScreen(expense)
         })
+
+        renderPaginationControls()
     }).catch((err)=>{
         console.log(err)
     })
+}
+
+
+function renderPaginationControls(){
+    const container = document.getElementById("pagination")
+    container.innerHTML = ""
+
+    const page = document.createElement("span")
+    page.textContent = `Page ${currentPage} of ${totalPages}`
+    container.appendChild(page)
+    page.style.margin = "10px"
+
+    if(currentPage>1){
+        const backBtn = document.createElement("button")
+        backBtn.textContent = "Prev page"
+        backBtn.onclick = ()=>{
+            loadExpense(currentPage-1)
+        }
+        container.appendChild(backBtn)
+    }
+
+    if (currentPage<totalPages){
+        const nextBtn = document.createElement("button")
+        nextBtn.textContent = "Next page"
+        nextBtn.onclick = ()=>{
+            loadExpense(currentPage+1)
+        }
+        container.appendChild(nextBtn)
+    }
 }
 
 async function handleFormSubmit(event){
@@ -92,15 +157,17 @@ async function handleFormSubmit(event){
         axios.put(`${api_url}/updateExpense/${editExpenseId}`,
         expenseDetails, {headers: {authorization: token}}).then(()=>{
             refreshLeaderboard()
-            expenseDetails.id = editExpenseId
-            for (let i = 0; i<allExpenses.length;i++){
-                if(allExpenses[i].id == editExpenseId){
-                    allExpenses[i] = expenseDetails
-                    break
-                }
-            }
 
-            editingLi.firstChild.textContent = `${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category} `
+            loadExpense(currentPage)
+            // expenseDetails.id = editExpenseId
+            // for (let i = 0; i<allExpenses.length;i++){
+            //     if(allExpenses[i].id == editExpenseId){
+            //         allExpenses[i] = expenseDetails
+            //         break
+            //     }
+            // }
+
+            // editingLi.firstChild.textContent = `${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category} `
 
 
             editExpenseId = null
@@ -113,7 +180,8 @@ async function handleFormSubmit(event){
         expenseDetails,{headers:{authorization: `${token}`}}).then((response)=>{
             allExpenses.push(response.data)
             refreshLeaderboard()
-            displayExpenseOnScreen(response.data)
+            loadExpense(currentPage)
+            // displayExpenseOnScreen(response.data)
         }).catch((err)=>{console.log(err)})
     }
 
@@ -167,7 +235,13 @@ function displayExpenseOnScreen(expenseDetails){
         .then(()=>{
             refreshLeaderboard()
             allExpenses = allExpenses.filter((b)=>b.id != id)
-            expenseList.removeChild(expenseItem)
+
+            if(allExpenses.length === 0 && currentPage>1){
+                loadExpense(currentPage - 1)    
+            }else{
+                loadExpense(currentPage)
+            }
+            // expenseList.removeChild(expenseItem)
         })
         .catch((err)=>{console.log(err)})
     })
@@ -243,4 +317,9 @@ function refreshLeaderboard(){
 
 
 
-window.addEventListener("DOMContentLoaded",()=>{isPremium(),loadExpense()})
+window.addEventListener("DOMContentLoaded",async()=>{const rowsDropdown = document.getElementById("rowsPerPage")
+        itemsPerPage = Number(rowsDropdown.value)
+        await isPremium()
+        loadExpense(currentPage)
+        pagination()
+})
