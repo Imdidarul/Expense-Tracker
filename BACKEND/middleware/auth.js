@@ -5,7 +5,7 @@ const {User} = require("../model")
 const authenticate = (req, res, next)=>{
     try {
         const token = req.header("authorization")
-        console.log(token)
+        // console.log(token)
 
         const extracted = jwt.verify(token, "thisisasecretkey")
         const userid = extracted.userId

@@ -148,7 +148,8 @@ async function handleFormSubmit(event){
         amount: Number(document.getElementById("amount").value),
         description: document.getElementById("description").value,
         // category: document.getElementById("category").value
-        category: category
+        category: category,
+        note: document.getElementById("note").value
     }
 
 
@@ -211,7 +212,7 @@ function displayExpenseOnScreen(expenseDetails){
     expenseItem.dataset.id = expenseDetails.id
 
     expenseItem.appendChild(
-        document.createTextNode(`${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category}  `)
+        document.createTextNode(`${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category}  | ${expenseDetails.note}`)
     )
 
     const deleteBtn = document.createElement("button")
@@ -261,6 +262,7 @@ function displayExpenseOnScreen(expenseDetails){
         if (currentExpense){
             document.getElementById("amount").value = currentExpense.amount
             document.getElementById("description").value = currentExpense.description
+            document.getElementById("note").value = currentExpense.note
             // document.getElementById("category").value = currentExpense.category
         }
     })

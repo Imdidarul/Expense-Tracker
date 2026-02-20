@@ -2,7 +2,8 @@ const {Sequelize} = require("sequelize")
 
 const sequelize = new Sequelize('testdb','root','04082002@Didar',{
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
+    logging:false
 });
 
 

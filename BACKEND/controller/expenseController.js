@@ -5,13 +5,16 @@ const sequelize = require("../utils/dbConnection");
 const addExpense = async (req,res)=>{
     const t = await sequelize.transaction()
     try {
-        const {amount,description,category} = req.body;
+        const {amount,description,category,note} = req.body;
+
+        console.log("The body is this LOOK AT THIS:",req.body)
 
         const expense = await Expense.create({
             amount: amount,
             description: description,
             category: category,
-            userId: req.user.id
+            userId: req.user.id,
+            note:note
         }, {transaction: t})
 
             const user = await User.findOne({where:{id:req.user.id},transaction:t})
@@ -21,6 +24,7 @@ const addExpense = async (req,res)=>{
 
             await t.commit()
             console.log("Expense added")
+            console.log("The body is this LOOK AT THIS:",req.body)
             res.status(201).json(expense)
     } catch (error) {
         await t.rollback()
@@ -68,7 +72,7 @@ const updateExpense = async (req,res)=>{
     const t = await sequelize.transaction()
     try {
         const {id} = req.params
-        const {amount,description,category}= req.body
+        const {amount,description,category,note}= req.body
 
         const expense = await Expense.findOne({
             where:{id, userId: req.user.id},
@@ -84,7 +88,7 @@ const updateExpense = async (req,res)=>{
 
         // const [updatedRows] = 
         await expense.update(
-            {amount,description,category},
+            {amount,description,category,note},
             {transaction: t}
         )
 

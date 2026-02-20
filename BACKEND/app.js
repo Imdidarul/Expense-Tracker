@@ -27,7 +27,7 @@ app.use("/check",checkRoute)
 
 
 
-db.sync({alter:true}).then(()=>{
+db.sync().then(()=>{
     app.listen(3000,(err)=>{
         console.log("Server is running")
     })
