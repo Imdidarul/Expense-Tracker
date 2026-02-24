@@ -7,7 +7,7 @@ const authenticate = (req, res, next)=>{
         const token = req.header("authorization")
         // console.log(token)
 
-        const extracted = jwt.verify(token, "thisisasecretkey")
+        const extracted = jwt.verify(token, process.env.AUTH_SECRET_KEY)
         const userid = extracted.userId
 
         User.findByPk(userid).then(user=>{
