@@ -38,8 +38,10 @@
     </form>
 
     <button id="leaderboard" class="leaderboard" style="display: none;" onclick="showLeaderboard()">Show leaderboard</button>
+    <button id="download_file" class="download_file" onclick="download()">Download File</button>
 
-    <a href="report.html"><button id="reportBtn" style="margin: 10px;">Report</button></a>
+    <!-- <a href="report.html"><button id="reportBtn" style="margin: 10px;">Report</button></a> -->
+
 
     <ul id="leaderboard-list"  style="display: none;" class="list-unstyled">
 
@@ -62,6 +64,11 @@
     </ul>
 
     <div id="pagination" style="margin:15px">
+
+    </div>
+
+    <button id="downloadBtn" onclick="downloadedExpense()"> Show Downloaded Expense</button>
+    <div id="downloadedExpense" class="downloadedExpense" style="display: none;">
 
     </div>
 

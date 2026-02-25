@@ -26,7 +26,7 @@ const logStream = fs.createWriteStream(
 app.use(cors())
 app.use(express.json())
 app.use(helemt())
-app.use(morgan('combined', {stream: logStream}))
+// app.use(morgan('combined', {stream: logStream}))
 
 app.use("/user",signupRoute)
 app.use("/login",loginRoute)

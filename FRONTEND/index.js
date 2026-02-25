@@ -1,3 +1,8 @@
+// const { response } = require("express")
+
+// const { token } = require("morgan")
+// const expense = require("../BACKEND/model/expense")
+
 let currentPage = 1
 let itemsPerPage = 10
 let totalPages = 1
@@ -11,7 +16,35 @@ const urlParams = new URLSearchParams(window.location.search);
 const orderId = urlParams.get("order_id");
 
 
-
+async function downloadedExpense(){
+    try {
+        const token = localStorage.getItem("token")
+        const showBtn = document.getElementById("downloadBtn")
+        const downloadedExpensesList = document.getElementById("downloadedExpense")
+        downloadedExpensesList.style.display = "block"
+        downloadedExpensesList.innerHTML = ""
+        const res = await axios.get(`${api_url}/downloadedExpenses`,{ headers:{ authorization: token } })
+        res.data.forEach((expense)=>{
+            const li = document.createElement("li")
+            const link = document.createElement("a")
+            link.href = expense.url
+            link.textContent = expense.url
+            // li.textContent = `${expense.id} || ${link}`
+            // li.append(`${expense.id}   ||   `)
+            li.appendChild(link)
+            downloadedExpensesList.append(li)
+        })
+        const hideBtn = document.createElement("button")
+        hideBtn.innerText = "Hide List"
+        hideBtn.onclick = ()=>{
+            downloadedExpensesList.style.display = "none"
+        }
+        downloadedExpensesList.append(hideBtn)
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
 
 
 async function isPremium(){
@@ -202,8 +235,38 @@ async function findCategory(){
         return "Other"
     }
 
+
+
 }
 
+
+async function download(){
+    const token = localStorage.getItem("token")
+    const res = await axios.get(
+        "http://localhost:3000/check/premium-status",
+        { headers:{ authorization: token } })
+    // console.log(res.data.premium)
+    // alert(res.data.premium)
+    if (!res.data.premium){
+        return alert("Premium required for downloading expenses!")
+    }
+
+    axios.get(`${api_url}/downloadExpenses`,{headers:{authorization: `${token}`}})
+    .then((response)=>{
+        if(response.status === 200){
+            var down = document.createElement("a")
+            // console.log("This is the file link:",response.data.fileURL)
+            down.href = response.data.fileURL
+            down.download = 'myexpense.txt'
+            down.click()
+            downloadedExpense()
+        }else{
+            throw new Error(response.data.message)
+        }
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
 
 function displayExpenseOnScreen(expenseDetails){
     const expenseItem = document.createElement("li")
