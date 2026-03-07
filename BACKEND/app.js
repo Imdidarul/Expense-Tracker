@@ -39,7 +39,7 @@ app.use("/check",checkRoute)
 
 
 db.sync().then(()=>{
-    app.listen(process.env.PORT || 3000,(err)=>{
+    app.listen(process.env.PORT || 3000,"0.0.0.0",(err)=>{
         console.log("Server is running")
     })
 }).catch((err)=>{
