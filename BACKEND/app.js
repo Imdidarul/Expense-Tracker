@@ -28,6 +28,9 @@ app.use(express.json())
 app.use(helemt())
 // app.use(morgan('combined', {stream: logStream}))
 
+app.get("/", (req, res) => {
+    res.send("Backend is running 🚀");
+  });
 app.use("/user",signupRoute)
 app.use("/login",loginRoute)
 app.use("/expenses",expenseRoute)

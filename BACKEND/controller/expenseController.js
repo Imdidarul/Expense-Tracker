@@ -89,7 +89,7 @@ const addExpense = async (req,res)=>{
 
             await t.commit()
             console.log("Expense added")
-            console.log("The body is this LOOK AT THIS:",req.body)
+            // console.log("The body is this LOOK AT THIS:",req.body)
             res.status(201).json(expense)
     } catch (error) {
         await t.rollback()
@@ -115,7 +115,8 @@ const getExpenses = async (req,res) => {
         const {count, rows} = await Expense.findAndCountAll({
             where:{userId: req.user.id},
             limit: limit,
-            offset: offset
+            offset: offset,
+            order:[["createdAt","Desc"]]
         })
         console.log("All expenses fetched")
         res.status(200).json({
