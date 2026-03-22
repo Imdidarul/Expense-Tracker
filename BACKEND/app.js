@@ -17,7 +17,7 @@ const path = require("path")
 
 
 const logStream = fs.createWriteStream(
-    path.join(__dirname,'access.log'),
+    path.join(__dirname,'tmp/access.log'),
     {flags: 'a'}
 );
 
