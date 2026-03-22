@@ -8,7 +8,7 @@ const whatCategory = async (req, res) => {
         const response = await axios.post(
             "https://router.huggingface.co/v1/chat/completions",
             {
-                model: "mistralai/Mistral-7B-Instruct-v0.2", 
+                model: "meta-llama/Meta-Llama-3-8B-Instruct", 
                 messages: [
                     {
                         role: "user",

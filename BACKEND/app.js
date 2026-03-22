@@ -28,6 +28,9 @@ app.use(express.json())
 app.use(helemt())
 // app.use(morgan('combined', {stream: logStream}))
 
+app.get("/", (req, res) => {
+    res.send("Backend is running 🚀");
+  });
 app.use("/user",signupRoute)
 app.use("/login",loginRoute)
 app.use("/expenses",expenseRoute)
@@ -39,7 +42,7 @@ app.use("/check",checkRoute)
 
 
 db.sync().then(()=>{
-    app.listen(process.env.PORT || 3000,(err)=>{
+    app.listen(process.env.PORT || 3000,"0.0.0.0",(err)=>{
         console.log("Server is running")
     })
 }).catch((err)=>{
