@@ -1,21 +1,19 @@
-const Expense = require("../model/expense")
 const User = require("../model/user")
-const sequelize = require("../utils/dbConnection")
 
 const getLeaderboard = async (req, res) => {
     try {
+        const userId = req.user.id
 
-        if (!req.user.premium) {
+        const user = await User.findById(userId)
+
+        if (!user.premium) {
             return res.status(403).json({
                 success: false,
                 message: "Only premium users can access leaderboard"
             })
         }
 
-        const users = await User.findAll({
-            attributes: ["name", "totalExpense"],
-            order: [["totalExpense", "DESC"]]
-        })
+        const users = await User.find({}).select("name totalExpense").sort({totalExpense: -1})
 
         return res.status(200).json(users)
 
@@ -24,6 +22,8 @@ const getLeaderboard = async (req, res) => {
     }
 }
 
+
+module.exports = { getLeaderboard }
 
 // const getLeaderboard = async (req,res)=>{
 //     try {
@@ -52,4 +52,3 @@ const getLeaderboard = async (req, res) => {
 //     }
 // }
 
-module.exports = { getLeaderboard }

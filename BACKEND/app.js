@@ -2,9 +2,10 @@ const express = require("express")
 const app = express()
 require('dotenv').config()
 const cors = require("cors")
-const helemt = require("helmet")
+const helmet = require("helmet")
 const morgan = require("morgan")
-const db = require("./utils/dbConnection")
+// const db = require("./utils/dbConnection")
+const mongoose = require("mongoose")
 const fs = require("fs")
 const expenseRoute = require("./routes/expenseRoute")
 const signupRoute = require("./routes/signupRoute")
@@ -25,7 +26,7 @@ const logStream = fs.createWriteStream(
 
 app.use(cors())
 app.use(express.json())
-app.use(helemt())
+app.use(helmet())
 // app.use(morgan('combined', {stream: logStream}))
 
 app.get("/", (req, res) => {
@@ -41,10 +42,19 @@ app.use("/check",checkRoute)
 
 
 
-db.sync().then(()=>{
-    app.listen(process.env.PORT || 3000,"0.0.0.0",(err)=>{
+mongoose.connect(process.env.MONGO_URI).then(res=>{
+    console.log("Mongo connected")
+    app.listen(process.env.PORT || 3000, "0.0.0.0",()=>{
         console.log("Server is running")
     })
-}).catch((err)=>{
-    console.log("Unable to connect to server")
+}).catch(err=>{
+    console.log(err)
 })
+
+// db.sync().then(()=>{
+//     app.listen(process.env.PORT || 3000,"0.0.0.0",(err)=>{
+//         console.log("Server is running")
+//     })
+// }).catch((err)=>{
+//     console.log("Unable to connect to server")
+// })

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const {User} = require("../model")
+const User = require("../model/user")
 
 
 const authenticate = (req, res, next)=>{
@@ -10,7 +10,7 @@ const authenticate = (req, res, next)=>{
         const extracted = jwt.verify(token, process.env.AUTH_SECRET_KEY)
         const userid = extracted.userId
 
-        User.findByPk(userid).then(user=>{
+        User.findById(userid).then(user=>{
             if(!user){
                 return res.status(401).json({success: false, message: "User not found"})
             }

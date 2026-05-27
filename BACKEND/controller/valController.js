@@ -1,4 +1,4 @@
-const User = require("../model")
+const User = require("../model/user")
 
 const getPremiumStatus = async (req, res) => {
     try{

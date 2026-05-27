@@ -1,5 +1,5 @@
 const {createOrder} = require("../services/cashfreeService")
-const {User} =  require("../model")
+const User =  require("../model/user")
 const Payment = require("../model/payment")
 const {Cashfree, CFEnvironment} = require("cashfree-pg")
 const cashfree = new Cashfree(
@@ -11,6 +11,7 @@ const cashfree = new Cashfree(
 
 const createPayment = async (req, res) => {
     try {
+        const userId = req.user.id
         const {amount, customerPhone} = req.body
         const customerId = req.user.id.toString()
 
@@ -39,14 +40,25 @@ const createPayment = async (req, res) => {
             })
         }
 
-        await Payment.create({
+        const payment = new Payment({
             orderId,
             paymentSessionId,
             orderAmount: amount,
-            orderCurrency: "INR",
+            orderCurrency:"INR",
             paymentStatus:"Pending",
-            userId: req.user.id
+            userId
         })
+
+        await payment.save()
+
+        // await Payment.create({
+        //     orderId,
+        //     paymentSessionId,
+        //     orderAmount: amount,
+        //     orderCurrency: "INR",
+        //     paymentStatus:"Pending",
+        //     userId: req.user.id
+        // })
 
         // await User.update({ premium: true }, { where: { id: req.user.id } })
 
@@ -116,7 +128,7 @@ const verifyPayment = async(req,res)=>{
             orderStatus = "PENDING"
         }
 
-        const payment = await Payment.findOne({where:{orderId}})
+        const payment = await Payment.findOne({orderId:orderId})
 
         if(!payment){
             return res.status(404).json({message:"Payment could not be found"})
@@ -126,9 +138,9 @@ const verifyPayment = async(req,res)=>{
         await payment.save()
 
         if (orderStatus === "SUCCESS") {
-            await User.update(
-                {premium: true},
-                {where:{id: payment.userId}}
+            await User.updateOne(
+                {_id: payment.userId},
+                {premium: true}
             )
         }
 

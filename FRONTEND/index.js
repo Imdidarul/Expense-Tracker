@@ -124,13 +124,14 @@ function loadExpense(page = 1){
     const token = localStorage.getItem("token")
     axios.get(`${api_url}/getExpense?page=${page}&limit=${itemsPerPage}`,{headers:{authorization: `${token}`}})
     .then((response)=>{
+        console.log(response)
         allExpenses = response.data.expenses || []
         totalPages = response.data.totalPages
         currentPage = response.data.currentPage
         const ul = document.getElementById("expense-list")
         ul.innerHTML = ""
         
-        response.data.expenses.forEach((expense) => {
+        allExpenses.forEach((expense) => {
             displayExpenseOnScreen(expense)
         })
 
@@ -272,7 +273,7 @@ function displayExpenseOnScreen(expenseDetails){
     const expenseItem = document.createElement("li")
     const token = localStorage.getItem('token')
 
-    expenseItem.dataset.id = expenseDetails.id
+    expenseItem.dataset.id = expenseDetails._id
 
     expenseItem.appendChild(
         document.createTextNode(`${expenseDetails.amount} | ${expenseDetails.description} | ${expenseDetails.category}  | ${expenseDetails.note}`)
@@ -294,11 +295,11 @@ function displayExpenseOnScreen(expenseDetails){
 
 
     deleteBtn.addEventListener("click", function(){
-        const id = Number(expenseItem.dataset.id)
+        const id = expenseItem.dataset.id
         axios.delete(`${api_url}/deleteExpense/${id}`, {headers:{authorization: token}})
         .then(()=>{
             refreshLeaderboard()
-            allExpenses = allExpenses.filter((b)=>b.id != id)
+            allExpenses = allExpenses.filter((b)=>b._id != id)
 
             if(allExpenses.length === 0 && currentPage>1){
                 loadExpense(currentPage - 1)    
@@ -311,12 +312,12 @@ function displayExpenseOnScreen(expenseDetails){
     })
 
     editBtn.addEventListener("click",function(){
-        editExpenseId = Number(expenseItem.dataset.id)
+        editExpenseId = expenseItem.dataset.id
         editingLi = expenseItem
 
         let currentExpense = null
         for (let i = 0; i<allExpenses.length;i++){
-            if(allExpenses[i].id == editExpenseId){
+            if(allExpenses[i]._id == editExpenseId){
                 currentExpense = allExpenses[i]
                 break
             }
